@@ -6,6 +6,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.concurrent.TimeUnit;
@@ -14,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private CountDownTimer timer;
+    private ImageButton pauseButton;
+    private Button endButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,9 +27,26 @@ public class MainActivity extends AppCompatActivity {
 
         final TextView timerTextView = findViewById(R.id.timerTextView);
 
+        pauseButton = findViewById(R.id.pauseTimerImageButton);
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timer.cancel();
+            }
+        });
 
-        timer = new CountDownTimer(3000, 500){
+        endButton = findViewById(R.id.endTimerButton);
+        endButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timer.cancel();
+                timerTextView.setText(
+                        getString(R.string.time, 0, 0)
+                );
+            }
+        });
 
+        timer = new CountDownTimer(30000, 500){
             @Override
             public void onTick(long millisecondsRemaining) {
                 long minutes = TimeUnit.MILLISECONDS.toMinutes(millisecondsRemaining);
