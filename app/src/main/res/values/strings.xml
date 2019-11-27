@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Pomodoro Timer</string>
+    <string name="work">Work</string>
+    <string name="short_break">Short Break</string>
+    <string name="long_break">Long Break</string>
+    <string name="time">%1$s</string>
+    <string name="end">End</string>
+    <string name="pause_timer">Pause Timer</string>
 </resources>
