@@ -22,6 +22,8 @@ public class CountDownTimerManager {
     public void pauseTimer() {
         timerRunning = false;
         timer.cancel();
+
+        displayListener.onTimerPause();
     }
 
     private void startTimer(long milliseconds){
@@ -29,6 +31,7 @@ public class CountDownTimerManager {
         int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(milliseconds);
         int seconds = (int) (TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
                 TimeUnit.MINUTES.toSeconds(minutes));
+
         startTimer(minutes, seconds);
     }
 
@@ -41,13 +44,13 @@ public class CountDownTimerManager {
 
             @Override
             public void onTick(long millisecondsRemaining) {
+                timerMillisecondsRemaining = millisecondsRemaining;
+
                 long minutes = TimeUnit.MILLISECONDS.toMinutes(millisecondsRemaining);
                 long seconds = TimeUnit.MILLISECONDS.toSeconds(millisecondsRemaining) -
                         TimeUnit.MINUTES.toSeconds(minutes);
 
                 displayListener.onTimerTick(minutes, seconds);
-
-                timerMillisecondsRemaining = millisecondsRemaining;
             }
 
             @Override
@@ -67,6 +70,7 @@ public class CountDownTimerManager {
     public void resumeTimer() {
         if(timerMillisecondsRemaining > 0){
             startTimer(timerMillisecondsRemaining);
+            displayListener.onTimerResume();
         }
     }
 

@@ -75,4 +75,14 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
         endButton.setEnabled(false);
         pauseButton.setEnabled(false);
     }
+
+    @Override
+    public void onTimerPause() {
+        pauseButton.setImageResource(android.R.drawable.ic_media_play);
+    }
+
+    @Override
+    public void onTimerResume() {
+        pauseButton.setImageResource(android.R.drawable.ic_media_pause);
+    }
 }

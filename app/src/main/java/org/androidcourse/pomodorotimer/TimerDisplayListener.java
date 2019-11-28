@@ -4,4 +4,8 @@ interface TimerDisplayListener {
     void onTimerTick(long minutes, long seconds);
 
     void onTimerFinish();
+
+    void onTimerPause();
+
+    void onTimerResume();
 }
