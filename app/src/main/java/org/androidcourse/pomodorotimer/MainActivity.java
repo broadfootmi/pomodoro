@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements TimerDisplayListener {
 
-    private ImageButton pauseButton;
+    private PauseButton pauseButton;
     private Button endButton;
     private TextView timerTextView;
 
@@ -78,11 +78,13 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
 
     @Override
     public void onTimerPause() {
-        pauseButton.setImageResource(android.R.drawable.ic_media_play);
+        pauseButton.setStateResume(true);
+        pauseButton.refreshDrawableState();
     }
 
     @Override
     public void onTimerResume() {
-        pauseButton.setImageResource(android.R.drawable.ic_media_pause);
+        pauseButton.setStateResume(false);
+        pauseButton.refreshDrawableState();
     }
 }

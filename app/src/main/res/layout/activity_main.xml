@@ -35,13 +35,13 @@
         android:layout_marginTop="80dp"
         android:orientation="vertical">
 
-        <ImageButton
+        <org.androidcourse.pomodorotimer.PauseButton
             android:id="@+id/pauseTimerImageButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:contentDescription="@string/pause_timer"
             android:elevation="4dp"
-            app:srcCompat="@android:drawable/ic_media_pause" />
+            android:src="@drawable/pause_button"/>
 
         <Button
             android:id="@+id/endTimerButton"
