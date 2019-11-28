@@ -6,4 +6,5 @@
     <string name="time">%1$02d:%2$02d</string>
     <string name="end">End</string>
     <string name="pause_timer">Pause Timer</string>
+    <string name="resume_timer">Resume Timer</string>
 </resources>

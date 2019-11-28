@@ -14,24 +14,35 @@ import android.widget.TextView;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
+    private boolean timerRunning = true;
+    private long timerMillisecondsRemaining;
+
+    private ImageButton pauseButton;
+    private Button endButton;
+    private TextView timerTextView;
 
 
     private CountDownTimer timer;
-    private ImageButton pauseButton;
-    private Button endButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final TextView timerTextView = findViewById(R.id.timerTextView);
+        timerTextView = findViewById(R.id.timerTextView);
 
         pauseButton = findViewById(R.id.pauseTimerImageButton);
         pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                timer.cancel();
+                if(timerRunning){
+                    pauseTimer();
+                }
+                else {
+                    if(timerMillisecondsRemaining > 0){
+                        startTimer(timerMillisecondsRemaining);
+                    }
+                }
             }
         });
 
@@ -39,14 +50,39 @@ public class MainActivity extends AppCompatActivity {
         endButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                timer.cancel();
+                timer.onFinish();
                 timerTextView.setText(
                         getString(R.string.time, 0, 0)
                 );
             }
         });
 
-        timer = new CountDownTimer(30000, 500){
+        startTimer(25, 0);
+
+    }
+
+    private void pauseTimer() {
+        timerRunning = false;
+
+        timer.cancel();
+
+    }
+
+    private void startTimer(long milliseconds){
+
+        int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(milliseconds);
+        int seconds = (int) (TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+                        TimeUnit.MINUTES.toSeconds(minutes));
+        startTimer(minutes, seconds);
+    }
+
+    private void startTimer(int minutes, int seconds){
+        long timeMilliseconds = TimeUnit.MINUTES.toMillis(minutes) +
+                TimeUnit.SECONDS.toMillis(seconds);
+        long countDownInterval = 100; //ms
+
+         timer = new CountDownTimer(timeMilliseconds, countDownInterval){
+
             @Override
             public void onTick(long millisecondsRemaining) {
                 long minutes = TimeUnit.MILLISECONDS.toMinutes(millisecondsRemaining);
@@ -58,15 +94,22 @@ public class MainActivity extends AppCompatActivity {
                                 R.string.time,
                                 minutes,
                                 seconds
-                                )
+                        )
                 );
+                timerMillisecondsRemaining = millisecondsRemaining;
             }
 
             @Override
             public void onFinish() {
+                timerMillisecondsRemaining = 0;
+                timerRunning = false;
+                endButton.setEnabled(false);
+                pauseButton.setEnabled(false);
             }
+
         }.start();
 
+        timerRunning = true;
 
     }
 }
