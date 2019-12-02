@@ -7,4 +7,5 @@
     <string name="end">End</string>
     <string name="pause_timer">Pause Timer</string>
     <string name="resume_timer">Resume Timer</string>
+    <string name="timer_over">%1$s Timer is Over!</string>
 </resources>

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.concurrent.TimeUnit;
 
@@ -74,6 +75,15 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
 
         endButton.setEnabled(false);
         pauseButton.setEnabled(false);
+
+        Toast.makeText(
+                this,
+                getString(
+                        R.string.timer_over,
+                        getString(R.string.work)
+                        ),
+                Toast.LENGTH_LONG)
+                .show();
     }
 
     @Override
