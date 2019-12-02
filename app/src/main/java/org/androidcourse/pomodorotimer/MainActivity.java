@@ -6,6 +6,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -54,6 +57,23 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
 
         timerManager.startTimer(25, 0);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        Toast.makeText(
+                this,
+                R.string.coming_soon,
+                Toast.LENGTH_SHORT
+        ).show();
+        return true;
     }
 
     @Override

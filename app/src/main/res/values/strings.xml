@@ -8,4 +8,6 @@
     <string name="pause_timer">Pause Timer</string>
     <string name="resume_timer">Resume Timer</string>
     <string name="timer_over">%1$s Timer is Over!</string>
+    <string name="action_settings">Settings</string>
+    <string name="coming_soon">Feature Coming Soon!</string>
 </resources>
