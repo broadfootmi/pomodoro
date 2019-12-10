@@ -1,8 +1,10 @@
 package org.androidcourse.pomodorotimer;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
             }
         });
 
-        timerManager.startTimer(25, 0);
+        timerManager.startTimer(25);
 
     }
 
@@ -69,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-
         startActivity(new Intent(this, SettingsActivity.class));
         return true;
     }

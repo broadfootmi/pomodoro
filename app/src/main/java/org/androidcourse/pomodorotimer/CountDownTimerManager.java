@@ -26,6 +26,10 @@ public class CountDownTimerManager {
         displayListener.onTimerPause();
     }
 
+    public void startTimer(int minutes){
+        startTimer(minutes, 0);
+    }
+
     private void startTimer(long milliseconds){
 
         int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(milliseconds);
@@ -35,7 +39,7 @@ public class CountDownTimerManager {
         startTimer(minutes, seconds);
     }
 
-    public void startTimer(int minutes, int seconds){
+    private void startTimer(int minutes, int seconds){
         long timeMilliseconds = TimeUnit.MINUTES.toMillis(minutes) +
                 TimeUnit.SECONDS.toMillis(seconds);
         long countDownInterval = 100; //ms

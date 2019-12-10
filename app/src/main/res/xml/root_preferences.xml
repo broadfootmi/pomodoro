@@ -14,39 +14,33 @@
   ~ limitations under the License.
   -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="@string/messages_header">
+    <EditTextPreference
+        android:defaultValue="25"
+        android:key="@string/work_time_key"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/work"
+        android:inputType="number"/>
 
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
+    <EditTextPreference
+        android:defaultValue="5"
+        android:key="@string/short_break_time_key"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/short_break"
+        android:inputType="number"/>
 
-        <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
-            app:useSimpleSummaryProvider="true" />
+    <EditTextPreference
+        android:defaultValue="10"
+        android:key="@string/long_break_time_key"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/long_break"
+        android:inputType="number"/>
 
-    </PreferenceCategory>
-
-    <PreferenceCategory app:title="@string/sync_header">
-
-        <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
-
-        <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
-
-    </PreferenceCategory>
 
 </PreferenceScreen>
