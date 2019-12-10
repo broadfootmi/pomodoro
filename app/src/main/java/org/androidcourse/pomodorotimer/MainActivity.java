@@ -2,6 +2,7 @@ package org.androidcourse.pomodorotimer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -68,11 +69,8 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        Toast.makeText(
-                this,
-                R.string.coming_soon,
-                Toast.LENGTH_SHORT
-        ).show();
+
+        startActivity(new Intent(this, SettingsActivity.class));
         return true;
     }
 
