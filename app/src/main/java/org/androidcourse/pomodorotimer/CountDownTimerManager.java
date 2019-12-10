@@ -1,18 +1,28 @@
 package org.androidcourse.pomodorotimer;
 
+import android.content.Context;
 import android.os.CountDownTimer;
 
+import java.security.InvalidParameterException;
 import java.util.concurrent.TimeUnit;
+
+import androidx.preference.PreferenceManager;
 
 public class CountDownTimerManager {
 
+    private Context context;
     private TimerDisplayListener displayListener;
     private CountDownTimer timer;
     private boolean timerRunning;
     private long timerMillisecondsRemaining;
 
-    public CountDownTimerManager(TimerDisplayListener displayListener){
+    private static final String WORK_PREF_KEY = "pref_workTime";
+    private static final String SHORT_BREAK_PREF_KEY = "pref_shortBreakTime";
+    private static final String LONG_BREAK_PREF_KEY = "pref_longBreakTime";
+
+    public CountDownTimerManager(TimerDisplayListener displayListener, Context context){
         this.displayListener = displayListener;
+        this.context = context;
     }
 
     public boolean isTimerRunning() {
@@ -26,7 +36,7 @@ public class CountDownTimerManager {
         displayListener.onTimerPause();
     }
 
-    public void startTimer(int minutes){
+    private void startTimer(int minutes){
         startTimer(minutes, 0);
     }
 
@@ -81,5 +91,32 @@ public class CountDownTimerManager {
     public void endTimer() {
         pauseTimer();
         timer.onFinish();
+    }
+
+    public void startTimer(TimerType type) throws InvalidParameterException {
+        String preferenceKey;
+        switch(type) {
+            case WORK:
+                preferenceKey = WORK_PREF_KEY;
+                break;
+            case SHORT_BREAK:
+                preferenceKey = SHORT_BREAK_PREF_KEY;
+                break;
+            case LONG_BREAK:
+                preferenceKey = LONG_BREAK_PREF_KEY;
+                break;
+            default:
+                throw new InvalidParameterException("No such timer.");
+
+        }
+
+        int timerMinutes = Integer.parseInt(
+                PreferenceManager.getDefaultSharedPreferences(context)
+                        .getString(
+                                preferenceKey,
+                                null
+                        )
+        );
+        startTimer(timerMinutes);
     }
 }

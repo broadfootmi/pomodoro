@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
         setContentView(R.layout.activity_main);
         PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
 
-        timerManager = new CountDownTimerManager(this);
+        timerManager = new CountDownTimerManager(this, this);
 
         timerTextView = findViewById(R.id.timerTextView);
 
@@ -59,15 +59,7 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
             }
         });
 
-        int timerMinutes = Integer.parseInt(
-                PreferenceManager.getDefaultSharedPreferences(this)
-                        .getString(
-                        "pref_workTime",
-                        null
-                        )
-        );
-        timerManager.startTimer(timerMinutes);
-
+        timerManager.startTimer(TimerType.WORK);
 
     }
 
