@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
 
         timerManager = new CountDownTimerManager(this);
 
@@ -58,7 +59,15 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
             }
         });
 
-        timerManager.startTimer(25);
+        int timerMinutes = Integer.parseInt(
+                PreferenceManager.getDefaultSharedPreferences(this)
+                        .getString(
+                        "pref_workTime",
+                        null
+                        )
+        );
+        timerManager.startTimer(timerMinutes);
+
 
     }
 
@@ -72,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         startActivity(new Intent(this, SettingsActivity.class));
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
