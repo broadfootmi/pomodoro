@@ -34,8 +34,6 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
         setContentView(R.layout.activity_main);
         PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
 
-        timerManager = new CountDownTimerManager(this, this);
-
         timerTextView = findViewById(R.id.timerTextView);
 
         pauseButton = findViewById(R.id.pauseTimerImageButton);
@@ -59,8 +57,7 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
             }
         });
 
-        timerManager.startTimer(TimerType.WORK);
-
+        timerManager = new CountDownTimerManager(this, this);
     }
 
     @Override

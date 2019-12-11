@@ -20,6 +20,8 @@ public class CountDownTimerManager {
     public CountDownTimerManager(TimerDisplayListener displayListener, Context context){
         this.displayListener = displayListener;
         this.context = context;
+
+        startTimerPaused(TimerType.WORK);
     }
 
     public boolean isTimerRunning() {
@@ -50,6 +52,7 @@ public class CountDownTimerManager {
         long timeMilliseconds = TimeUnit.MINUTES.toMillis(minutes) +
                 TimeUnit.SECONDS.toMillis(seconds);
         long countDownInterval = 100; //ms
+        timerMillisecondsRemaining = timeMilliseconds;
 
         timer = new CountDownTimer(timeMilliseconds, countDownInterval){
 
@@ -90,7 +93,7 @@ public class CountDownTimerManager {
         timer.onFinish();
     }
 
-    public void startTimer(TimerType type) throws InvalidParameterException {
+    public void startTimer(TimerType type) {
         String preferenceKey = type.getPreferenceKey();
 
         String timerPreferenceText = PreferenceManager
@@ -111,4 +114,12 @@ public class CountDownTimerManager {
 
         startTimer(timerMinutes);
     }
+
+    public void startTimerPaused(TimerType type){
+        startTimer(type);
+        timer.onTick(timerMillisecondsRemaining);
+        pauseTimer();
+
+    }
+
 }
