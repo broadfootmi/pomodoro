@@ -16,9 +16,9 @@ public class CountDownTimerManager {
     private boolean timerRunning;
     private long timerMillisecondsRemaining;
 
-    private static final String WORK_PREF_KEY = "pref_workTime";
-    private static final String SHORT_BREAK_PREF_KEY = "pref_shortBreakTime";
-    private static final String LONG_BREAK_PREF_KEY = "pref_longBreakTime";
+    public static final String WORK_PREF_KEY = "pref_workTime";
+    public static final String SHORT_BREAK_PREF_KEY = "pref_shortBreakTime";
+    public static final String LONG_BREAK_PREF_KEY = "pref_longBreakTime";
 
     public CountDownTimerManager(TimerDisplayListener displayListener, Context context){
         this.displayListener = displayListener;
