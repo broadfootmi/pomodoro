@@ -59,6 +59,13 @@ public class SettingsActivity extends AppCompatActivity {
                             @Override
                             public void onBindEditText(@NonNull EditText editText) {
                                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                                editText.setHint(
+                                        getString(R.string.timer_preference_hint)
+                                );
+
+                                editText.setSelectAllOnFocus(true);
+                                editText.clearFocus();
+                                editText.requestFocus();
                             }
                         }
                 );

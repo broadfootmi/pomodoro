@@ -13,5 +13,6 @@
     <string name="title_activity_settings">Settings</string>
     <string name="time_minutes">%1$d minutes</string>
     <string name="saved_changes">Saved changes!</string>
+    <string name="timer_preference_hint">Enter Time in Minutes</string>
 
 </resources>
