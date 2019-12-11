@@ -2,6 +2,7 @@ package org.androidcourse.pomodorotimer;
 
 import android.content.Context;
 import android.os.CountDownTimer;
+import android.util.Log;
 
 import java.security.InvalidParameterException;
 import java.util.concurrent.TimeUnit;
@@ -110,13 +111,22 @@ public class CountDownTimerManager {
 
         }
 
-        int timerMinutes = Integer.parseInt(
-                PreferenceManager.getDefaultSharedPreferences(context)
-                        .getString(
-                                preferenceKey,
-                                null
-                        )
-        );
+        String timerPreferenceText = PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getString(
+                        preferenceKey,
+                        null
+                );
+
+        int timerMinutes = 0;
+        if (timerPreferenceText != null) {
+            if(!timerPreferenceText.isEmpty()) {
+                timerMinutes = Integer.parseInt(timerPreferenceText);
+            }
+        } else{
+            Log.e("Settings", "Null timer preference detected. Using 0.");
+        }
+
         startTimer(timerMinutes);
     }
 }
