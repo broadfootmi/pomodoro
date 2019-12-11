@@ -2,8 +2,11 @@ package org.androidcourse.pomodorotimer;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.EditTextPreference;
@@ -50,6 +53,16 @@ public class SettingsActivity extends AppCompatActivity {
 
             for(String key : timerPreferenceKeys){
                 EditTextPreference timerPreference = findPreference(key);
+
+                timerPreference.setOnBindEditTextListener(
+                        new EditTextPreference.OnBindEditTextListener() {
+                            @Override
+                            public void onBindEditText(@NonNull EditText editText) {
+                                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                            }
+                        }
+                );
+
                 setEditTextPreferenceSummaryToItsValue(timerPreference);
             }
         }
