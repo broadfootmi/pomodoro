@@ -46,14 +46,9 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
-            String[] timerPreferenceKeys = new String[]{
-                    CountDownTimerManager.WORK_PREF_KEY,
-                    CountDownTimerManager.SHORT_BREAK_PREF_KEY,
-                    CountDownTimerManager.LONG_BREAK_PREF_KEY
-            };
-
-            for(String key : timerPreferenceKeys){
-                EditTextPreference timerPreference = findPreference(key);
+            for(TimerType timer : TimerType.values()) {
+                String preferenceKey = timer.getPreferenceKey();
+                EditTextPreference timerPreference = findPreference(preferenceKey);
 
                 if (timerPreference != null) {
                     timerPreference.setOnBindEditTextListener(
@@ -71,12 +66,12 @@ public class SettingsActivity extends AppCompatActivity {
                                 }
                             }
                     );
+
                     setEditTextPreferenceSummaryToItsValue(timerPreference);
-                } else{
+
+                } else {
                     Log.e("Settings", "Null Pref in SettingsAct.onCreatePref()");
                 }
-
-
             }
         }
 

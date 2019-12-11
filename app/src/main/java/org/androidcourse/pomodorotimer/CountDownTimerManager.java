@@ -17,10 +17,6 @@ public class CountDownTimerManager {
     private boolean timerRunning;
     private long timerMillisecondsRemaining;
 
-    public static final String WORK_PREF_KEY = "pref_workTime";
-    public static final String SHORT_BREAK_PREF_KEY = "pref_shortBreakTime";
-    public static final String LONG_BREAK_PREF_KEY = "pref_longBreakTime";
-
     public CountDownTimerManager(TimerDisplayListener displayListener, Context context){
         this.displayListener = displayListener;
         this.context = context;
@@ -95,21 +91,7 @@ public class CountDownTimerManager {
     }
 
     public void startTimer(TimerType type) throws InvalidParameterException {
-        String preferenceKey;
-        switch(type) {
-            case WORK:
-                preferenceKey = WORK_PREF_KEY;
-                break;
-            case SHORT_BREAK:
-                preferenceKey = SHORT_BREAK_PREF_KEY;
-                break;
-            case LONG_BREAK:
-                preferenceKey = LONG_BREAK_PREF_KEY;
-                break;
-            default:
-                throw new InvalidParameterException("No such timer.");
-
-        }
+        String preferenceKey = type.getPreferenceKey();
 
         String timerPreferenceText = PreferenceManager
                 .getDefaultSharedPreferences(context)
