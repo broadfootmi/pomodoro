@@ -6,6 +6,7 @@ import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,9 +26,24 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        int timerOrdinal = -1;
         if (data != null) {
-            int timerOrdinal = data.getExtras().getBundle("result").getInt("timer_ordinal");
-            timerManager.startTimer(TimerType.values()[timerOrdinal], false);
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                Bundle result = extras.getBundle(ChooseNextTimerActivity.RESULT_TIMER_TYPE);
+                if(result != null){
+                    timerOrdinal = result.getInt(ChooseNextTimerActivity.TIMER_TYPE_ORDINAL);
+                    timerManager.startTimer(TimerType.values()[timerOrdinal], false);
+                }
+            }
+        }
+
+        if(timerOrdinal == -1){
+            Log.e(
+                    "ChooseNextTimerActivity",
+                    "ChooseNextTimerActivity returns invalid result"
+            );
         }
     }
 

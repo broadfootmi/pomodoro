@@ -11,6 +11,9 @@ public class ChooseNextTimerActivity extends AppCompatActivity {
 
     public static final int REQUEST_NEXT_TIMER = 1;
 
+    public static final String RESULT_TIMER_TYPE = "result";
+    public static final String TIMER_TYPE_ORDINAL = "timer_ordinal";
+
     private Button workButton;
     private Button shortBreakButton;
     private Button longBreakButton;
@@ -49,10 +52,10 @@ public class ChooseNextTimerActivity extends AppCompatActivity {
 
     private void finishWithResult(TimerType work) {
         Bundle timerTypeBundle = new Bundle();
-        timerTypeBundle.putInt("timer_ordinal", work.ordinal());
+        timerTypeBundle.putInt(TIMER_TYPE_ORDINAL, work.ordinal());
 
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("result", timerTypeBundle);
+        resultIntent.putExtra(RESULT_TIMER_TYPE, timerTypeBundle);
 
         setResult(REQUEST_NEXT_TIMER, resultIntent);
         finish();
