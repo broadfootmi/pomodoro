@@ -76,6 +76,15 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         @Override
+        public void onStop() {
+            super.onStop();
+
+            getPreferenceScreen()
+                    .getSharedPreferences()
+                    .unregisterOnSharedPreferenceChangeListener(this);
+        }
+
+        @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             Preference changedPreference = findPreference(key);
 
