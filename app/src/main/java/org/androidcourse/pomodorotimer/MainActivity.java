@@ -1,24 +1,18 @@
 package org.androidcourse.pomodorotimer;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements TimerDisplayListener {
 
@@ -27,6 +21,15 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
     private TextView timerTextView;
 
     private CountDownTimerManager timerManager;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data != null) {
+            int timerOrdinal = data.getExtras().getBundle("result").getInt("timer_ordinal");
+            timerManager.startTimer(TimerType.values()[timerOrdinal], false);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +104,14 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
                         ),
                 Toast.LENGTH_LONG)
                 .show();
+
+        startActivityForResult(
+                new Intent(
+                        this,
+                        ChooseNextTimerActivity.class
+                ),
+                ChooseNextTimerActivity.REQUEST_NEXT_TIMER
+        );
     }
 
     @Override
@@ -113,5 +124,14 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
     public void onTimerResume() {
         pauseButton.setStateResume(false);
         pauseButton.refreshDrawableState();
+    }
+
+    @Override
+    public void onTimerStart(long minutes, long seconds, boolean paused) {
+        endButton.setEnabled(true);
+        pauseButton.setEnabled(true);
+        onTimerTick(minutes, seconds);
+
+        pauseButton.setStateResume(paused);
     }
 }

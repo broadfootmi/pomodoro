@@ -21,7 +21,7 @@ public class CountDownTimerManager {
         this.displayListener = displayListener;
         this.context = context;
 
-        startTimerPaused(TimerType.WORK);
+        startTimer(TimerType.WORK, true);
     }
 
     public boolean isTimerRunning() {
@@ -35,20 +35,20 @@ public class CountDownTimerManager {
         displayListener.onTimerPause();
     }
 
-    private void startTimer(int minutes){
-        startTimer(minutes, 0);
+    private void startTimer(int minutes, boolean paused){
+        startTimer(minutes, 0, paused);
     }
 
-    private void startTimer(long milliseconds){
+    private void startTimer(long milliseconds, boolean paused){
 
         int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(milliseconds);
         int seconds = (int) (TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
                 TimeUnit.MINUTES.toSeconds(minutes));
 
-        startTimer(minutes, seconds);
+        startTimer(minutes, seconds, paused);
     }
 
-    private void startTimer(int minutes, int seconds){
+    private void startTimer(int minutes, int seconds, boolean paused){
         long timeMilliseconds = TimeUnit.MINUTES.toMillis(minutes) +
                 TimeUnit.SECONDS.toMillis(seconds);
         long countDownInterval = 100; //ms
@@ -79,11 +79,17 @@ public class CountDownTimerManager {
 
         timerRunning = true;
 
+        displayListener.onTimerStart(minutes, seconds, paused);
+
+        if(paused){
+            pauseTimer();
+        }
+
     }
 
     public void resumeTimer() {
         if(timerMillisecondsRemaining > 0){
-            startTimer(timerMillisecondsRemaining);
+            startTimer(timerMillisecondsRemaining, false);
             displayListener.onTimerResume();
         }
     }
@@ -93,7 +99,7 @@ public class CountDownTimerManager {
         timer.onFinish();
     }
 
-    public void startTimer(TimerType type) {
+    public void startTimer(TimerType type, boolean paused) {
         String preferenceKey = type.getPreferenceKey();
 
         String timerPreferenceText = PreferenceManager
@@ -112,14 +118,8 @@ public class CountDownTimerManager {
             Log.e("Settings", "Null timer preference detected. Using 0.");
         }
 
-        startTimer(timerMinutes);
+        startTimer(timerMinutes, paused);
     }
 
-    public void startTimerPaused(TimerType type){
-        startTimer(type);
-        timer.onTick(timerMillisecondsRemaining);
-        pauseTimer();
-
-    }
 
 }
