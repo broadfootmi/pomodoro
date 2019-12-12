@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.CountDownTimer;
 import android.util.Log;
 
-import java.security.InvalidParameterException;
 import java.util.concurrent.TimeUnit;
 
 import androidx.preference.PreferenceManager;
@@ -12,10 +11,15 @@ import androidx.preference.PreferenceManager;
 public class CountDownTimerManager {
 
     private Context context;
+
     private TimerDisplayListener displayListener;
     private CountDownTimer timer;
+
     private boolean timerRunning;
     private long timerMillisecondsRemaining;
+
+    private TimerType activeTimerType = null;
+    private long activeTimerTotalMinutes;
 
     public CountDownTimerManager(TimerDisplayListener displayListener, Context context){
         this.displayListener = displayListener;
@@ -100,6 +104,7 @@ public class CountDownTimerManager {
     }
 
     public void startTimer(TimerType type, boolean paused) {
+        activeTimerType = type;
         String preferenceKey = type.getPreferenceKey();
 
         String timerPreferenceText = PreferenceManager
@@ -118,6 +123,7 @@ public class CountDownTimerManager {
             Log.e("Settings", "Null timer preference detected. Using 0.");
         }
 
+        activeTimerTotalMinutes = timerMinutes;
         startTimer(timerMinutes, paused);
     }
 
