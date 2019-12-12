@@ -9,7 +9,6 @@ import android.widget.Button;
 
 public class ChooseNextTimerActivity extends AppCompatActivity {
 
-    public static final int REQUEST_NEXT_TIMER = 1;
 
     public static final String RESULT_TIMER_TYPE = "result";
     public static final String TIMER_TYPE_ORDINAL = "timer_ordinal";
@@ -57,7 +56,7 @@ public class ChooseNextTimerActivity extends AppCompatActivity {
         Intent resultIntent = new Intent();
         resultIntent.putExtra(RESULT_TIMER_TYPE, timerTypeBundle);
 
-        setResult(REQUEST_NEXT_TIMER, resultIntent);
+        setResult(MainActivity.REQUEST_NEXT_TIMER, resultIntent);
         finish();
     }
 }

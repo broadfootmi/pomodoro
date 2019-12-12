@@ -1,11 +1,15 @@
 package org.androidcourse.pomodorotimer;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -15,6 +19,10 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 public class SettingsActivity extends AppCompatActivity {
+    public static final String RESULT_TIMER_CHANGES = "result";
+    public static final String CHANGED_TIMERS = "timers";
+
+    private boolean[] changedTimerOrdinals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +36,24 @@ public class SettingsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        changedTimerOrdinals = new boolean[TimerType.values().length];
+    }
+
+    private void updateResult() {
+        Bundle changedTimersBundle = new Bundle();
+        changedTimersBundle.putBooleanArray(CHANGED_TIMERS, changedTimerOrdinals);
+
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(RESULT_TIMER_CHANGES, changedTimersBundle);
+
+        setResult(MainActivity.REQUEST_TIMER_CHANGES, resultIntent);
+    }
+
+    private void setPreferenceChanged(TimerType timerChanged) {
+        Log.d("SettingsActivity", String.valueOf(timerChanged.ordinal()));
+        changedTimerOrdinals[timerChanged.ordinal()] = true;
+        updateResult();
     }
 
     public static class SettingsFragment
@@ -98,6 +124,17 @@ public class SettingsActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT
             ).show();
 
+            TimerType timerChanged = null;
+            for(TimerType type : TimerType.values()){
+                if(type.getPreferenceKey().equals(key)){
+                    timerChanged = type;
+                }
+            }
+
+            if(timerChanged != null) {
+                SettingsActivity settingsActivity = (SettingsActivity) getActivity();
+                settingsActivity.setPreferenceChanged(timerChanged);
+            }
         }
 
         @Override
@@ -134,4 +171,5 @@ public class SettingsActivity extends AppCompatActivity {
             );
         }
     }
+
 }

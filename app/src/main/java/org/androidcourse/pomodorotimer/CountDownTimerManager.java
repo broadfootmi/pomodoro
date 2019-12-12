@@ -28,6 +28,10 @@ public class CountDownTimerManager {
         startTimer(TimerType.WORK, true);
     }
 
+    public int getActiveTimerOrdinal() {
+        return activeTimerType.ordinal();
+    }
+
     public boolean isTimerRunning() {
         return timerRunning;
     }

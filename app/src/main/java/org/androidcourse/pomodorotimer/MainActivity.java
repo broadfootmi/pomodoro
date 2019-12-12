@@ -1,6 +1,7 @@
 package org.androidcourse.pomodorotimer;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
@@ -23,27 +24,51 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
 
     private CountDownTimerManager timerManager;
 
+    public static final int REQUEST_NEXT_TIMER = 1;
+    public static final int REQUEST_TIMER_CHANGES = 2;
+
+    private boolean[] timersChanged;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        int timerOrdinal = -1;
-        if (data != null) {
-            Bundle extras = data.getExtras();
-            if (extras != null) {
-                Bundle result = extras.getBundle(ChooseNextTimerActivity.RESULT_TIMER_TYPE);
-                if(result != null){
-                    timerOrdinal = result.getInt(ChooseNextTimerActivity.TIMER_TYPE_ORDINAL);
-                    timerManager.startTimer(TimerType.values()[timerOrdinal], false);
-                }
+        Bundle extras;
+        if(data != null){
+            extras = data.getExtras();
+            if(extras == null){
+                Log.e("MainActivity", "Started activity which returned null extras.");
+                return;
             }
+        } else{
+            Log.e("MainActivity", "Started activity which returned null data result.");
+            return;
         }
 
-        if(timerOrdinal == -1){
-            Log.e(
-                    "ChooseNextTimerActivity",
-                    "ChooseNextTimerActivity returns invalid result"
-            );
+        if(resultCode == REQUEST_NEXT_TIMER){
+            int timerOrdinal = -1;
+            Bundle result = extras.getBundle(ChooseNextTimerActivity.RESULT_TIMER_TYPE);
+
+            if(result != null){
+                timerOrdinal = result.getInt(ChooseNextTimerActivity.TIMER_TYPE_ORDINAL);
+                timerManager.startTimer(TimerType.values()[timerOrdinal], false);
+            }
+
+            if(timerOrdinal == -1){
+                Log.e(
+                        "MainActivity",
+                        "ChooseNextTimerActivity returned invalid result"
+                );
+            }
+
+        } else if(resultCode == REQUEST_TIMER_CHANGES){
+            Bundle result = extras.getBundle(SettingsActivity.RESULT_TIMER_CHANGES);
+
+            if(result != null){
+                timersChanged = result.getBooleanArray(
+                        SettingsActivity.CHANGED_TIMERS
+                ).clone();
+            }
         }
     }
 
@@ -80,6 +105,24 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(timersChanged == null){
+            Log.e("MainActivity", "Did not notice timer setting change.");
+            return;
+        }
+
+        else if(timersChanged[timerManager.getActiveTimerOrdinal()]){
+            Log.d("MainActivity", "Showing Dialog");
+            timersChanged = null;
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle("test");
+            alertDialogBuilder.show();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
@@ -88,7 +131,11 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        startActivity(new Intent(this, SettingsActivity.class));
+        startActivityForResult(
+                new Intent(this, SettingsActivity.class),
+                REQUEST_TIMER_CHANGES
+        );
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -117,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
                 getString(
                         R.string.timer_over,
                         getString(R.string.work)
-                        ),
+                ),
                 Toast.LENGTH_LONG)
                 .show();
 
@@ -126,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
                         this,
                         ChooseNextTimerActivity.class
                 ),
-                ChooseNextTimerActivity.REQUEST_NEXT_TIMER
+                REQUEST_NEXT_TIMER
         );
     }
 
@@ -140,6 +187,8 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
     public void onTimerResume() {
         pauseButton.setStateResume(false);
         pauseButton.refreshDrawableState();
+
+
     }
 
     @Override
