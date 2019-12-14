@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
             if(timerOrdinal == -1){
                 Log.e(
                         "MainActivity",
-                        "ChooseNextTimerActivity returned invalid result"
+                        "ChooseNextTimerActivity returned invalid result."
                 );
             }
 
@@ -67,7 +68,13 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
             if(result != null){
                 timersChanged = result.getBooleanArray(
                         SettingsActivity.CHANGED_TIMERS
-                ).clone();
+                );
+
+                if(timersChanged != null){
+                    timersChanged.clone();
+                } else{
+                    Log.e("MainActivity", "Timer Changes request returned null.");
+                }
             }
         }
     }
@@ -81,17 +88,19 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
         timerTextView = findViewById(R.id.timerTextView);
 
         pauseButton = findViewById(R.id.pauseTimerImageButton);
-        pauseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(timerManager.isTimerRunning()){
-                    timerManager.pauseTimer();
+        pauseButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(timerManager.isTimerRunning()){
+                            timerManager.pauseTimer();
+                        }
+                        else {
+                            timerManager.resumeTimer();
+                        }
+                    }
                 }
-                else {
-                    timerManager.resumeTimer();
-                }
-            }
-        });
+        );
 
         endButton = findViewById(R.id.endTimerButton);
         endButton.setOnClickListener(new View.OnClickListener() {
@@ -110,14 +119,34 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
 
         if(timersChanged == null){
             Log.e("MainActivity", "Did not notice timer setting change.");
-            return;
         }
 
         else if(timersChanged[timerManager.getActiveTimerOrdinal()]){
-            Log.d("MainActivity", "Showing Dialog");
             timersChanged = null;
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setTitle("test");
+            alertDialogBuilder.setTitle(R.string.reset_timer_prompt);
+
+            alertDialogBuilder.setPositiveButton(
+                    android.R.string.ok,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            timerManager.pauseTimer();
+                            timerManager.startTimer(timerManager.getActiveTimerType(), true);
+                        }
+                    }
+            );
+
+            alertDialogBuilder.setNegativeButton(
+                    android.R.string.no,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    }
+            );
+
             alertDialogBuilder.show();
         }
     }

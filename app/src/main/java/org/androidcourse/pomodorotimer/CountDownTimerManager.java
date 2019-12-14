@@ -18,8 +18,11 @@ public class CountDownTimerManager {
     private boolean timerRunning;
     private long timerMillisecondsRemaining;
 
+    public TimerType getActiveTimerType() {
+        return activeTimerType;
+    }
+
     private TimerType activeTimerType = null;
-    private long activeTimerTotalMinutes;
 
     public CountDownTimerManager(TimerDisplayListener displayListener, Context context){
         this.displayListener = displayListener;
@@ -127,7 +130,6 @@ public class CountDownTimerManager {
             Log.e("Settings", "Null timer preference detected. Using 0.");
         }
 
-        activeTimerTotalMinutes = timerMinutes;
         startTimer(timerMinutes, paused);
     }
 

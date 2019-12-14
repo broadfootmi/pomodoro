@@ -15,5 +15,6 @@
     <string name="saved_changes">Saved changes!</string>
     <string name="timer_preference_hint">Enter Time in Minutes</string>
     <string name="next_question">Next?</string>
+    <string name="reset_timer_prompt">Timer change detected. Reset current timer?</string>
 
 </resources>
