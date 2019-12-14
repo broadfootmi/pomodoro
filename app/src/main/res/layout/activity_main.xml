@@ -43,14 +43,14 @@
             android:elevation="4dp"
             android:src="@drawable/pause_button"/>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/endTimerButton"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="@string/end"
-            android:textSize="20sp"
             android:layout_marginTop="20dp"
-            android:elevation="4dp" />
+            android:elevation="4dp"
+            android:src="@drawable/stop_button"
+            android:contentDescription="@string/end_timer" />
     </LinearLayout>
 
 </RelativeLayout>

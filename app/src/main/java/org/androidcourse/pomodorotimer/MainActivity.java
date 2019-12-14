@@ -13,14 +13,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements TimerDisplayListener {
 
     private PauseButton pauseButton;
-    private Button endButton;
+    private ImageButton endButton;
     private TextView timerTextView;
 
     private CountDownTimerManager timerManager;
