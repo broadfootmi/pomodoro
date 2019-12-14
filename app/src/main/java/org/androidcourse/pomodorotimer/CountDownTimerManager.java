@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import androidx.preference.PreferenceManager;
 
-public class CountDownTimerManager {
+class CountDownTimerManager {
 
     private Context context;
 
@@ -18,28 +18,28 @@ public class CountDownTimerManager {
     private boolean timerRunning;
     private long timerMillisecondsRemaining;
 
-    public TimerType getActiveTimerType() {
+    TimerType getActiveTimerType() {
         return activeTimerType;
     }
 
     private TimerType activeTimerType = null;
 
-    public CountDownTimerManager(TimerDisplayListener displayListener, Context context){
+    CountDownTimerManager(TimerDisplayListener displayListener, Context context){
         this.displayListener = displayListener;
         this.context = context;
 
         startTimer(TimerType.WORK, true);
     }
 
-    public int getActiveTimerOrdinal() {
+    int getActiveTimerOrdinal() {
         return activeTimerType.ordinal();
     }
 
-    public boolean isTimerRunning() {
+    boolean isTimerRunning() {
         return timerRunning;
     }
 
-    public void pauseTimer() {
+    void pauseTimer() {
         timerRunning = false;
         timer.cancel();
 
@@ -98,19 +98,19 @@ public class CountDownTimerManager {
 
     }
 
-    public void resumeTimer() {
+    void resumeTimer() {
         if(timerMillisecondsRemaining > 0){
             startTimer(timerMillisecondsRemaining, false);
             displayListener.onTimerResume();
         }
     }
 
-    public void endTimer() {
+    void endTimer() {
         pauseTimer();
         timer.onFinish();
     }
 
-    public void startTimer(TimerType type, boolean paused) {
+    void startTimer(TimerType type, boolean paused) {
         activeTimerType = type;
         String preferenceKey = type.getPreferenceKey();
 
