@@ -207,10 +207,6 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
                 break;
         }
 
-        if(timerName == null){
-            Log.e("MainActivity", "Timer name is null");
-        }
-
         builder.setTitle(
                 getString(
                         R.string.timer_over,
@@ -221,11 +217,21 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                }
+        );
+
+        builder.setOnDismissListener(
+                new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
                         startChooseNextTimerActivity();
                         timerManager.stopAlarm();
                     }
                 }
         );
+
         builder.show();
 
     }

@@ -39,7 +39,7 @@ class CountDownTimerManager {
         if(alarm == null){
             alarm = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         }
-        
+
         ringtone = RingtoneManager.getRingtone(context, alarm);
 
         startTimer(TimerType.WORK, true);
@@ -150,7 +150,7 @@ class CountDownTimerManager {
     }
 
 
-    public void stopAlarm() {
+    void stopAlarm() {
         ringtone.stop();
     }
 }
