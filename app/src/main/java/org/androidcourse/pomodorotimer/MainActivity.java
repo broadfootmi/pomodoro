@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
     private PauseButton pauseButton;
     private ImageButton endButton;
     private TextView timerTextView;
+    private TextView timerLabelTextView;
 
     private CountDownTimerManager timerManager;
 
@@ -87,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
         setContentView(R.layout.activity_main);
         PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
 
+        timerLabelTextView = findViewById(R.id.timerLabelTextView);
         timerTextView = findViewById(R.id.timerTextView);
 
         pauseButton = findViewById(R.id.pauseTimerImageButton);
@@ -134,7 +136,10 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             timerManager.pauseTimer();
-                            timerManager.startTimer(timerManager.getActiveTimerType(), true);
+                            timerManager.startTimer(
+                                    timerManager.getActiveTimerType(),
+                                    true
+                            );
                         }
                     }
             );
@@ -192,20 +197,10 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        String timerName = null;
-        switch(timerManager.getActiveTimerType()){
-            case WORK:
-                timerName = getString(R.string.work);
-                break;
-            case LONG_BREAK:
-                timerName = getString(R.string.long_break);
-                break;
-            case SHORT_BREAK:
-                timerName = getString(R.string.short_break);
-                break;
-            default:
-                break;
-        }
+        String timerName = getString(
+                timerManager.getActiveTimerType()
+                        .getStringResource()
+        );
 
         builder.setTitle(
                 getString(
@@ -256,12 +251,17 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
     public void onTimerResume() {
         pauseButton.setStateResume(false);
         pauseButton.refreshDrawableState();
-
-
     }
 
     @Override
     public void onTimerStart(long minutes, long seconds, boolean paused) {
+        if(timerManager != null){
+            timerLabelTextView.setText(
+                    timerManager.getActiveTimerType()
+                            .getStringResource()
+            );
+        }
+
         endButton.setEnabled(true);
         pauseButton.setEnabled(true);
         onTimerTick(minutes, seconds);
