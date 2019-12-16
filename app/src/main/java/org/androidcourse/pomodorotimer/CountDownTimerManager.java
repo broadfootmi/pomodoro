@@ -1,11 +1,16 @@
 package org.androidcourse.pomodorotimer;
 
+import android.app.AlarmManager;
 import android.content.Context;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.CountDownTimer;
 import android.util.Log;
 
 import java.util.concurrent.TimeUnit;
 
+import androidx.core.app.AlarmManagerCompat;
 import androidx.preference.PreferenceManager;
 
 class CountDownTimerManager {
@@ -24,11 +29,21 @@ class CountDownTimerManager {
 
     private TimerType activeTimerType = null;
 
+    private Ringtone ringtone;
+
     CountDownTimerManager(TimerDisplayListener displayListener, Context context){
         this.displayListener = displayListener;
         this.context = context;
 
+        Uri alarm = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        if(alarm == null){
+            alarm = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        }
+        
+        ringtone = RingtoneManager.getRingtone(context, alarm);
+
         startTimer(TimerType.WORK, true);
+
     }
 
     int getActiveTimerOrdinal() {
@@ -108,6 +123,7 @@ class CountDownTimerManager {
     void endTimer() {
         pauseTimer();
         timer.onFinish();
+        ringtone.play();
     }
 
     void startTimer(TimerType type, boolean paused) {
@@ -134,4 +150,7 @@ class CountDownTimerManager {
     }
 
 
+    public void stopAlarm() {
+        ringtone.stop();
+    }
 }

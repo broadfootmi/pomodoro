@@ -14,4 +14,5 @@ enum TimerType {
     public String getPreferenceKey() {
         return preferenceKey;
     }
+
 }

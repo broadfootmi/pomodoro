@@ -3,8 +3,10 @@ package org.androidcourse.pomodorotimer;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.AlarmManagerCompat;
 import androidx.preference.PreferenceManager;
 
+import android.app.AlarmManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -188,15 +190,47 @@ public class MainActivity extends AppCompatActivity implements TimerDisplayListe
         endButton.setEnabled(false);
         pauseButton.setEnabled(false);
 
-        Toast.makeText(
-                this,
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        String timerName = null;
+        switch(timerManager.getActiveTimerType()){
+            case WORK:
+                timerName = getString(R.string.work);
+                break;
+            case LONG_BREAK:
+                timerName = getString(R.string.long_break);
+                break;
+            case SHORT_BREAK:
+                timerName = getString(R.string.short_break);
+                break;
+            default:
+                break;
+        }
+
+        if(timerName == null){
+            Log.e("MainActivity", "Timer name is null");
+        }
+
+        builder.setTitle(
                 getString(
                         R.string.timer_over,
-                        getString(R.string.work)
-                ),
-                Toast.LENGTH_LONG)
-                .show();
+                        timerName
+                )
+        );
 
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        startChooseNextTimerActivity();
+                        timerManager.stopAlarm();
+                    }
+                }
+        );
+        builder.show();
+
+    }
+
+    private void startChooseNextTimerActivity(){
         startActivityForResult(
                 new Intent(
                         this,
