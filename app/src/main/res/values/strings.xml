@@ -17,5 +17,6 @@
     <string name="next_question">Next?</string>
     <string name="reset_timer_prompt">Timer change detected. Reset current timer?</string>
     <string name="end_timer">End Timer</string>
+    <string name="warning_illogical_break_timer_values">Warning: Short Break is Higher than Long Break</string>
 
 </resources>

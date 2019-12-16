@@ -133,8 +133,37 @@ public class SettingsActivity extends AppCompatActivity {
 
             if(timerChanged != null) {
                 SettingsActivity settingsActivity = (SettingsActivity) getActivity();
-                settingsActivity.setPreferenceChanged(timerChanged);
+                if (settingsActivity != null) {
+                    settingsActivity.setPreferenceChanged(timerChanged);
+                }
             }
+
+            //Warn User if Long Break is less than Short Break
+            if(timerChanged == TimerType.LONG_BREAK || timerChanged == TimerType.SHORT_BREAK){
+                String shortBreakValue = sharedPreferences.getString(
+                        TimerType.SHORT_BREAK.getPreferenceKey(),
+                        null
+                );
+
+                String longBreakValue = sharedPreferences.getString(
+                        TimerType.LONG_BREAK.getPreferenceKey(),
+                        null
+                );
+
+                if((shortBreakValue != null) && (longBreakValue != null)) {
+                    int shortBreakMinutes = Integer.parseInt(shortBreakValue);
+                    int longBreakMinutes = Integer.parseInt(longBreakValue);
+
+                    if(shortBreakMinutes > longBreakMinutes){
+                        Toast.makeText(
+                                getContext(),
+                                R.string.warning_illogical_break_timer_values,
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
+                }
+            }
+
         }
 
         @Override
